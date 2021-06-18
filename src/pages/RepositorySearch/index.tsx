@@ -1,21 +1,17 @@
 import React from 'react';
 import { Input, AutoComplete } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import * as S from './styles';
 
 const renderItem = (title: string, count: number) => ({
   value: title,
   label: (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
+    <S.ItemWrapper>
       {title}
       <span>
         <small>contributors</small> <UserOutlined /> {count}
       </span>
-    </div>
+    </S.ItemWrapper>
   ),
 });
 
