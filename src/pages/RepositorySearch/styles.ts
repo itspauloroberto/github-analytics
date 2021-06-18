@@ -5,4 +5,4 @@ const ItemWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export { ItemWrapper }
+export { ItemWrapper };
