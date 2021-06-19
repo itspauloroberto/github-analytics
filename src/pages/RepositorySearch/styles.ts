@@ -1,8 +1,26 @@
 import styled from 'styled-components';
 
-const ItemWrapper = styled.div`
+const DropdownWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-export { ItemWrapper }
+const IconDescription = styled.small`
+  color: #aaa;
+`;
+
+const DropdownTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MainContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+`;
+
+export { DropdownWrapper, DropdownTitle, IconDescription, MainContainer };
