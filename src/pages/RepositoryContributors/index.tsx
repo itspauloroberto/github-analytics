@@ -1,13 +1,13 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { List, message, Avatar, Spin } from 'antd';
-import { BranchesOutlined, GithubOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import API from 'api';
 import InfiniteScroll from 'react-infinite-scroller';
+import { ContributorList } from './components/ContributorList';
 
 import * as S from './styles';
 
-interface IContributor {
+export interface IContributor {
   id: number;
   username: string;
   avatar: string;
@@ -52,8 +52,10 @@ export const RepositoryContributors: React.FC = () => {
         setHasMore(false);
       }
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
+      message.error(
+        `There was a problem when loading repository contributors. 
+        Check your connection and try again later.`,
+      );
     } finally {
       setIsFetching(false);
     }
@@ -62,28 +64,6 @@ export const RepositoryContributors: React.FC = () => {
   useEffect(() => {
     fetchContributors();
   }, [currentPage]);
-
-  const getCommitsByAuthorURL = (username: string): string => {
-    const baseURL = process.env.REACT_APP_GITHUB_EXTERNAL_URL;
-    const { organization, repository } = params;
-    return `${baseURL}${organization}/${repository}/commits?author=${username}`;
-  };
-
-  const HyperlinkWithIcon = ({
-    href,
-    icon,
-    title,
-  }: {
-    href: string;
-    icon: ReactElement;
-    title: string;
-  }): ReactElement => (
-    <S.IconWrapper>
-      <a href={href} rel="noreferrer" target="_blank" title={title}>
-        {icon}
-      </a>
-    </S.IconWrapper>
-  );
 
   return (
     <S.MainContainer>
@@ -105,51 +85,13 @@ export const RepositoryContributors: React.FC = () => {
             hasMore={!isFetching && hasMore}
             useWindow={false}
           >
-            <List
-              dataSource={contributors}
-              renderItem={item => (
-                <List.Item key={item.id}>
-                  <List.Item.Meta
-                    avatar={
-                      <S.AvatarWrapper>
-                        <a href={item.url} rel="noreferrer" target="_blank">
-                          <Avatar src={item.avatar} />
-                        </a>
-                      </S.AvatarWrapper>
-                    }
-                    title={
-                      <a href={item.url} rel="noreferrer" target="_blank">
-                        {item.username}
-                      </a>
-                    }
-                    description={
-                      <div>
-                        <HyperlinkWithIcon
-                          href={item.url}
-                          icon={<GithubOutlined />}
-                          title="User profile on GitHub."
-                        />
-                        <HyperlinkWithIcon
-                          href={getCommitsByAuthorURL(item.username)}
-                          icon={<BranchesOutlined />}
-                          title="Author commits on repository."
-                        />
-                      </div>
-                    }
-                  />
-                  <span>
-                    {new Intl.NumberFormat().format(item.contributions)}{' '}
-                    contributions
-                  </span>
-                </List.Item>
-              )}
-            >
-              {isFetching && hasMore && (
-                <S.LoadingContainer className="demo-loading-container">
-                  <Spin />
-                </S.LoadingContainer>
-              )}
-            </List>
+            <ContributorList
+              contributors={contributors}
+              organization={params.organization}
+              repository={params.repository}
+              hasMore={hasMore}
+              isFetching={isFetching}
+            />
           </InfiniteScroll>
         </S.InfiniteContainer>
       </div>

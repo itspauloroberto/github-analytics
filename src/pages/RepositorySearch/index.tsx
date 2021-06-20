@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { Button, Input, AutoComplete } from 'antd';
+import { Button, Input, AutoComplete, message } from 'antd';
 import {
   StarOutlined,
   BranchesOutlined,
@@ -89,6 +89,10 @@ export const RepositorySearch: React.FC = () => {
         }
       } catch (err) {
         setResultOptions([]);
+        message.error(
+          `There was a problem when loading repositories. 
+          Check your connection and try again later.`,
+        );
       } finally {
         setIsFetching(false);
       }
