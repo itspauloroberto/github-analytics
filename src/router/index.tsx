@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Home } from 'pages/Home';
 import { RepositorySearch } from 'pages/RepositorySearch';
-import { RepositoryContributors } from 'pages/RepositoryContributors';
+import RepositoryContributors from 'pages/RepositoryContributors';
 
 export const Router: React.FC = () => (
   <BrowserRouter>
