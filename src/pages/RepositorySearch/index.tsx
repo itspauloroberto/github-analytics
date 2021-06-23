@@ -5,7 +5,7 @@ import {
   BranchesOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
-import API from 'api';
+import { fetchSearchForRepositories } from 'services/repositories';
 import { useDebounce } from 'hooks/useDebounce';
 import { formatMillionToK } from 'helpers/numberFormats';
 import { useHistory } from 'react-router-dom';
@@ -56,50 +56,47 @@ export const RepositorySearch: React.FC = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm, 500);
 
-  useEffect(() => {
-    async function fetchRepositories(): Promise<void> {
-      setIsFetching(true);
-      setSelectedRepository('');
-      try {
-        const {
-          data: { items },
-        } = await API.get('/search/repositories', {
-          params: { page: 1, per_page: 10, q: debouncedSearchTerm },
-        });
-        if (items && items.length) {
-          setResultOptions([
-            {
-              label: 'Repositories',
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              options: items.map((item: any) =>
-                renderItem(
-                  item.full_name,
-                  item.stargazers_count,
-                  item.forks_count,
-                ),
+  const fetchRepositories = useCallback(async () => {
+    setIsFetching(true);
+    setSelectedRepository('');
+    try {
+      const {
+        data: { items },
+      } = await fetchSearchForRepositories(debouncedSearchTerm);
+      if (items && items.length) {
+        setResultOptions([
+          {
+            label: 'Repositories',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            options: items.map((item: any) =>
+              renderItem(
+                item.full_name,
+                item.stargazers_count,
+                item.forks_count,
               ),
-            },
-          ]);
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const repositoryFullNames = items.map((item: any) => item.full_name);
-          if (repositoryFullNames.includes(debouncedSearchTerm)) {
-            setSelectedRepository(debouncedSearchTerm);
-          }
-        } else {
-          setResultOptions([]);
+            ),
+          },
+        ]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const repositoryFullNames = items.map((item: any) => item.full_name);
+        if (repositoryFullNames.includes(debouncedSearchTerm)) {
+          setSelectedRepository(debouncedSearchTerm);
         }
-      } catch (err) {
+      } else {
         setResultOptions([]);
-        message.error(
-          `There was a problem when loading repositories. 
-          Check your connection and try again later.`,
-        );
-      } finally {
-        setIsFetching(false);
       }
+    } catch (err) {
+      setResultOptions([]);
+      message.error(
+        `There was a problem when loading repositories. Check your connection and try again later.`,
+      );
+    } finally {
+      setIsFetching(false);
     }
-    fetchRepositories();
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (debouncedSearchTerm) fetchRepositories();
   }, [debouncedSearchTerm]);
 
   const onSearchHandler = useCallback(() => {
@@ -120,6 +117,7 @@ export const RepositorySearch: React.FC = () => {
           onSelect={value => setSelectedRepository(value)}
         >
           <Input.Search
+            data-testid="search-repositories"
             size="large"
             placeholder="type here"
             enterButton={
