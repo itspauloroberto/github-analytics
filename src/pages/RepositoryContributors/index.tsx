@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import { message } from 'antd';
-import API from 'api';
+import { fetchRepositoryContributors } from 'services/repositories';
 import InfiniteScroll from 'react-infinite-scroller';
 import { ContributorList } from './components/ContributorList';
 
@@ -20,7 +21,7 @@ interface IContributorsParams {
   repository: string;
 }
 
-export const RepositoryContributors: React.FC = () => {
+const RepositoryContributors: React.FC = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -31,11 +32,10 @@ export const RepositoryContributors: React.FC = () => {
     const { organization, repository } = params;
     setIsFetching(true);
     try {
-      const { data } = await API.get(
-        `/repos/${organization}/${repository}/contributors`,
-        {
-          params: { page: currentPage, per_page: 10 },
-        },
+      const { data } = await fetchRepositoryContributors(
+        organization,
+        repository,
+        currentPage,
       );
       if (data && data.length) {
         setContributors([
@@ -98,3 +98,5 @@ export const RepositoryContributors: React.FC = () => {
     </S.MainContainer>
   );
 };
+
+export default withRouter(RepositoryContributors);
