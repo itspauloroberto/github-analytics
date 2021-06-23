@@ -4,7 +4,7 @@ import API from 'api';
 import contributorsFixture from 'helpers/fixtures/contributors.json';
 import { renderWithRouterMatch } from 'helpers/testutils';
 import RepositoryContributors from 'pages/RepositoryContributors';
-import { screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 
 describe('Given RepositoryContributors Component', () => {
   const routeParams = {
@@ -57,6 +57,7 @@ describe('Given RepositoryContributors Component', () => {
     });
 
     it('should warn the user accordingly that a error ocurred.', async () => {
+      cleanup();
       await waitFor(() =>
         renderWithRouterMatch(RepositoryContributors, routeParams),
       );
