@@ -57,7 +57,6 @@ describe('Given RepositoryContributors Component', () => {
     });
 
     it('should warn the user accordingly that a error ocurred.', async () => {
-      cleanup();
       await waitFor(() =>
         renderWithRouterMatch(RepositoryContributors, routeParams),
       );
@@ -67,11 +66,11 @@ describe('Given RepositoryContributors Component', () => {
         params: { page: 1, per_page: 10 },
       });
       expect(
-        screen.getByText(
+        screen.getAllByText(
           'There was a problem when loading repository contributors',
           { exact: false },
-        ),
-      ).toBeInTheDocument();
+        ).length,
+      ).toBeGreaterThan(0);
     });
   });
 });
