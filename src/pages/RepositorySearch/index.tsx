@@ -97,6 +97,7 @@ export const RepositorySearch: React.FC = () => {
 
   useEffect(() => {
     if (debouncedSearchTerm) fetchRepositories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   const onSearchHandler = useCallback(() => {
