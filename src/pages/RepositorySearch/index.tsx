@@ -1,5 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Button, Input, AutoComplete } from 'antd';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { Button, Input, AutoComplete, message } from 'antd';
 import {
   StarOutlined,
   BranchesOutlined,
@@ -8,6 +8,7 @@ import {
 import API from 'api';
 import { useDebounce } from 'hooks/useDebounce';
 import { formatMillionToK } from 'helpers/numberFormats';
+import { useHistory } from 'react-router-dom';
 import * as S from './styles';
 
 interface IAutoCompleteResultItem {
@@ -48,6 +49,8 @@ const renderItem = (
 });
 
 export const RepositorySearch: React.FC = () => {
+  const history = useHistory();
+  const [selectedRepository, setSelectedRepository] = useState<string>('');
   const [resultOptions, setResultOptions] = useState<IResultOptions[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -56,6 +59,7 @@ export const RepositorySearch: React.FC = () => {
   useEffect(() => {
     async function fetchRepositories(): Promise<void> {
       setIsFetching(true);
+      setSelectedRepository('');
       try {
         const {
           data: { items },
@@ -75,17 +79,31 @@ export const RepositorySearch: React.FC = () => {
               ),
             },
           ]);
+
+          const repositoryFullNames = items.map((item: any) => item.full_name);
+          if (repositoryFullNames.includes(debouncedSearchTerm)) {
+            setSelectedRepository(debouncedSearchTerm);
+          }
         } else {
           setResultOptions([]);
         }
       } catch (err) {
         setResultOptions([]);
+        message.error(
+          `There was a problem when loading repositories. 
+          Check your connection and try again later.`,
+        );
       } finally {
         setIsFetching(false);
       }
     }
     fetchRepositories();
   }, [debouncedSearchTerm]);
+
+  const onSearchHandler = useCallback(() => {
+    if (selectedRepository)
+      history.push(`repositories/${selectedRepository}/contributors`);
+  }, [history, selectedRepository]);
 
   return (
     <S.MainContainer>
@@ -97,16 +115,19 @@ export const RepositorySearch: React.FC = () => {
           dropdownMatchSelectWidth={500}
           style={{ width: 500 }}
           options={resultOptions}
+          onSelect={value => setSelectedRepository(value)}
         >
           <Input.Search
             size="large"
             placeholder="type here"
             enterButton={
-              <Button type="primary" icon={<ArrowRightOutlined />} />
+              <Button
+                disabled={isFetching || !selectedRepository}
+                type="primary"
+                icon={<ArrowRightOutlined />}
+              />
             }
-            onSearch={() => {
-              /* */
-            }}
+            onSearch={onSearchHandler}
             value={searchTerm}
             onChange={(e: any) => setSearchTerm(e.target.value)}
           />

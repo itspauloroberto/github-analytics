@@ -2,6 +2,4 @@ import React from 'react';
 import './App.css';
 import { Router } from 'router';
 
-const App: React.FC = () => <Router />;
-
-export default App;
+export const App: React.FC = () => <Router />;
