@@ -70,6 +70,7 @@ export const RepositorySearch: React.FC = () => {
           setResultOptions([
             {
               label: 'Repositories',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               options: items.map((item: any) =>
                 renderItem(
                   item.full_name,
@@ -80,6 +81,7 @@ export const RepositorySearch: React.FC = () => {
             },
           ]);
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const repositoryFullNames = items.map((item: any) => item.full_name);
           if (repositoryFullNames.includes(debouncedSearchTerm)) {
             setSelectedRepository(debouncedSearchTerm);
@@ -129,6 +131,7 @@ export const RepositorySearch: React.FC = () => {
             }
             onSearch={onSearchHandler}
             value={searchTerm}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onChange={(e: any) => setSearchTerm(e.target.value)}
           />
         </AutoComplete>

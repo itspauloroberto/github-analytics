@@ -40,6 +40,7 @@ const RepositoryContributors: React.FC = () => {
       if (data && data.length) {
         setContributors([
           ...contributors,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ...data.map((user: any) => ({
             id: user.id,
             username: user.login,
@@ -63,6 +64,7 @@ const RepositoryContributors: React.FC = () => {
 
   useEffect(() => {
     fetchContributors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   return (
