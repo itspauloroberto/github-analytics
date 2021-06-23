@@ -30,4 +30,8 @@ jobs:
         run: |
           npm ci --legacy-peer-deps
           npm run build --if-present
-          npm test      
+          npm test
+        env:
+          REACT_APP_GITHUB_API: $REACT_APP_GITHUB_API
+          REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN: $REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN
+          REACT_APP_GITHUB_EXTERNAL_URL: $REACT_APP_GITHUB_EXTERNAL_URL
