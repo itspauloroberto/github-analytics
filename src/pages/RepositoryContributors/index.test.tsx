@@ -4,7 +4,7 @@ import API from 'api';
 import contributorsFixture from 'helpers/fixtures/contributors.json';
 import { renderWithRouterMatch } from 'helpers/testutils';
 import RepositoryContributors from 'pages/RepositoryContributors';
-import { screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 
 describe('Given RepositoryContributors Component', () => {
   const routeParams = {
@@ -66,11 +66,11 @@ describe('Given RepositoryContributors Component', () => {
         params: { page: 1, per_page: 10 },
       });
       expect(
-        screen.getByText(
+        screen.getAllByText(
           'There was a problem when loading repository contributors',
           { exact: false },
-        ),
-      ).toBeInTheDocument();
+        ).length,
+      ).toBeGreaterThan(0);
     });
   });
 });
