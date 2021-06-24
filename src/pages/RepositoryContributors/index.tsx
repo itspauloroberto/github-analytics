@@ -72,7 +72,7 @@ const RepositoryContributors: React.FC = () => {
       <div className="col-12">
         <h2>
           Contributors of{' '}
-          <Link to="/repositories">
+          <Link to="/">
             {params.organization}/{params.repository}
           </Link>
         </h2>
