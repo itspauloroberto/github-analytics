@@ -1,46 +1,31 @@
-# Getting Started with Create React App
+# GitHub Analytics (MVP)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was inspired on a coding challenge provided by Flexiana Company. It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## How to run the Application?
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm install` or `yarn`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Installs the requires dependencies to make the application work properly when running it.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### `npm start` or `yarn start`
 
-### `npm test`
+Runs the app in the development mode, with hot raloading enabled and showing lint errors on console.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `npm test` or `yarn test`
 
-### `npm run build`
+Runs the test suite running all the unit test cases available on the application and show the results. It's also run on the Pipeline of this repository within the Test and Deploy GitHub Action. It validates the code being pushed to the repository.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## In case you do not want to run the application
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can see a deployed demo published on Heroku right here: https://github-analytics-mvp.herokuapp.com/ 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Important info
 
-### `npm run eject`
+There are some environment variables necessary for running the application locally. But for security reasons they are not available on the repository. By the way here is the explanation about each of them:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `REACT_APP_GITHUB_API`: It's the URI endpoint of GitHub API. (usually https://api.github.com)
+- `REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN`: It's a token that indicates which access you have from the API. You can generate for your github account if you need one, you can generate it here: https://github.com/settings/tokens
+- `REACT_APP_GITHUB_EXTERNAL_URL`: It's the GitHub URL itself used to create links on the app. (usually https://github.com/)
